@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { prisma } from '../utils/prisma.js';
+import { auth } from '../middleware/auth.js';
+const router=Router();
+const schema=z.object({name:z.string().min(2),college:z.string().optional().nullable(),bio:z.string().max(500).optional().nullable(),githubUrl:z.string().url().optional().or(z.literal('')),linkedinUrl:z.string().url().optional().or(z.literal('')),skills:z.array(z.string()).max(30)});
+router.get('/me',auth,async(req,res,next)=>{try{const u=await prisma.user.findUnique({where:{id:req.user.id},select:{id:true,name:true,email:true,college:true,bio:true,avatarUrl:true,githubUrl:true,linkedinUrl:true,skills:true,role:true}});res.json(u);}catch(e){next(e)}});
+router.put('/me',auth,async(req,res,next)=>{try{const d=schema.parse(req.body);const u=await prisma.user.update({where:{id:req.user.id},data:d,select:{id:true,name:true,email:true,college:true,bio:true,avatarUrl:true,githubUrl:true,linkedinUrl:true,skills:true,role:true}});res.json(u);}catch(e){next(e)}});
+router.get('/:id',async(req,res,next)=>{try{const u=await prisma.user.findUnique({where:{id:req.params.id},select:{id:true,name:true,college:true,bio:true,avatarUrl:true,githubUrl:true,linkedinUrl:true,skills:true,createdAt:true}});if(!u)return res.status(404).json({error:'User not found'});res.json(u);}catch(e){next(e)}});
+export default router;

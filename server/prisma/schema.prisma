@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ProjectStatus {
+  RECRUITING
+  ACTIVE
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  college      String?
+  bio          String?
+  avatarUrl    String?
+  githubUrl    String?
+  linkedinUrl  String?
+  skills       String[]
+  role         Role          @default(USER)
+  projects     Project[]     @relation("OwnerProjects")
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  category    String
+  skills      String[]
+  maxMembers  Int           @default(4)
+  status      ProjectStatus @default(RECRUITING)
+  ownerId     String
+  owner       User          @relation("OwnerProjects", fields: [ownerId], references: [id], onDelete: Cascade)
+  applications Application[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([category])
+  @@index([status])
+}
+
+model Application {
+  id        String            @id @default(cuid())
+  message   String?
+  status    ApplicationStatus @default(PENDING)
+  projectId String
+  userId    String
+  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  @@unique([projectId, userId])
+  @@index([projectId, status])
+}
