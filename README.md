@@ -37,14 +37,14 @@ npm run db:migrate
 ```bash
 npm run server
 ```
-API: http://localhost:5000
+
 
 ### 7. Start frontend
 In another terminal:
 ```bash
 npm run dev
 ```
-Frontend: http://localhost:5173
+
 
 ## API
 - `GET /api/health`
