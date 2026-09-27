@@ -834,6 +834,28 @@ function ProjectWorkspace({
 
   const [sending, setSending] =
     useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+async function deleteProject() {
+  const confirmed = window.confirm(
+    `Are you sure you want to delete "${project.title}"? This cannot be undone.`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    setDeleting(true);
+
+    await api.deleteProject(project.id);
+
+    notify('Project deleted successfully');
+    onBack();
+  } catch (error) {
+    notify(error.message || 'Failed to delete project');
+  } finally {
+    setDeleting(false);
+  }
+}
 
   const [loadingMessages, setLoadingMessages] =
     useState(true);
@@ -1035,6 +1057,15 @@ const [aiLoading, setAiLoading] = useState(false);
           {members.length}/
           {project.maxMembers}
         </div>
+        {project.ownerId === user.id && (
+  <button
+    className="outline danger"
+    onClick={deleteProject}
+    disabled={deleting}
+  >
+    {deleting ? 'Deleting...' : 'Delete Project'}
+  </button>
+)}
 
       </div>
 

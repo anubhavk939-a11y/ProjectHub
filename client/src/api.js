@@ -102,7 +102,7 @@ export const api = {
   messages: (projectId) =>
     request(`/projects/${projectId}/messages`),
 
- sendMessage: (projectId, content) =>
+  sendMessage: (projectId, content) =>
   request(`/projects/${projectId}/messages`, {
     method: 'POST',
     body: JSON.stringify({ content })
@@ -112,5 +112,10 @@ projectAI: (projectId, question) =>
   request(`/projects/${projectId}/ai`, {
     method: 'POST',
     body: JSON.stringify({ question })
+  }),
+
+deleteProject: (projectId) =>
+  request(`/projects/${projectId}`, {
+    method: 'DELETE'
   })
 };

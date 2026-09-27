@@ -202,7 +202,43 @@ router.get('/:id', async (req, res, next) => {
     next(error);
   }
 });
+/* =========================================================
+   DELETE PROJECT
+========================================================= */
 
+router.delete('/:id', auth, async (req, res, next) => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        error: 'Project not found'
+      });
+    }
+
+    if (project.ownerId !== req.user.id) {
+      return res.status(403).json({
+        error: 'Only the project owner can delete this project'
+      });
+    }
+
+    await prisma.project.delete({
+      where: {
+        id: project.id
+      }
+    });
+
+    res.json({
+      message: 'Project deleted successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 /* =========================================================
    APPLY TO PROJECT
 ========================================================= */
