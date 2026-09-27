@@ -1765,3 +1765,20 @@ footer b {
   opacity: 0.4;
   cursor: not-allowed;
 }
+.siteFooter {
+  width: 100%;
+  padding: 22px 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+}
+
+.footerName {
+  color: #ffffff !important;
+  font-weight: 700;
+  display: inline-block;
+}

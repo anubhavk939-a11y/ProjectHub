@@ -2222,8 +2222,13 @@ function Profile({
 
       </div>
 
-    </main>
-  );
+<footer className="siteFooter">
+  <span>Created by</span>
+  <span className="footerName">Kumar Anubhava</span>
+</footer>
+
+</main>
+);
 }
 
 
