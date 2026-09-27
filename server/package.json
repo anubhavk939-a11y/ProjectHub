@@ -10,12 +10,14 @@
     "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@google/genai": "^2.24.0",
     "@prisma/client": "^6.19.0",
     "bcryptjs": "latest",
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",
     "jsonwebtoken": "latest",
+    "openai": "^7.23.0",
     "zod": "latest"
   },
   "devDependencies": {

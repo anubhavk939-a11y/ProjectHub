@@ -36,8 +36,11 @@ model User {
   linkedinUrl  String?
   skills       String[]
   role         Role          @default(USER)
+
   projects     Project[]     @relation("OwnerProjects")
   applications Application[]
+  messages     Message[]
+
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -50,9 +53,13 @@ model Project {
   skills      String[]
   maxMembers  Int           @default(4)
   status      ProjectStatus @default(RECRUITING)
+
   ownerId     String
   owner       User          @relation("OwnerProjects", fields: [ownerId], references: [id], onDelete: Cascade)
+
   applications Application[]
+  messages     Message[]
+
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -64,12 +71,31 @@ model Application {
   id        String            @id @default(cuid())
   message   String?
   status    ApplicationStatus @default(PENDING)
+
   projectId String
   userId    String
+
   project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+
   @@unique([projectId, userId])
   @@index([projectId, status])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+
+  projectId String
+  userId    String
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId, createdAt])
 }
