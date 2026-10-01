@@ -1626,13 +1626,15 @@ function AuthModal({
 
 
   const [data, setData] =
-    useState({
-      name: '',
-      email: '',
-      password: '',
-      college: ''
-    });
-
+  useState({
+    name: '',
+    email: '',
+    password: '',
+    college: '',
+    gender: '',
+    state: '',
+    district: ''
+  });
 
   const [busy, setBusy] =
     useState(false);
@@ -1760,6 +1762,43 @@ function AuthModal({
               />
             </label>
           )}
+          {mode === 'register' && (
+  <label>
+    Gender
+    <select
+      value={data.gender}
+      onChange={e => setData({...data, gender: e.target.value})}
+    >
+      <option value="">Select gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Non-binary">Non-binary</option>
+      <option value="Prefer not to say">Prefer not to say</option>
+    </select>
+  </label>
+)}
+
+{mode === 'register' && (
+  <label>
+    State
+    <input
+      value={data.state}
+      onChange={e => setData({...data, state: e.target.value})}
+      placeholder="Enter your state"
+    />
+  </label>
+)}
+
+{mode === 'register' && (
+  <label>
+    District
+    <input
+      value={data.district}
+      onChange={e => setData({...data, district: e.target.value})}
+      placeholder="Enter your district"
+    />
+  </label>
+)}
 
 
           <label>
